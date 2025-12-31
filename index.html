@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Accesso area riservata</title>
+  <style>
+    * { box-sizing: border-box; }
+    body{
+      margin:0; min-height:100vh; display:grid; place-items:center;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:#f6f7fb; color:#111; padding:24px;
+    }
+    .wrap{ width:100%; max-width:520px; }
+    .brand{ display:flex; align-items:center; gap:12px; margin-bottom:14px; color:#1f2a44; }
+    .logo{ width:40px; height:40px; border-radius:12px; background: linear-gradient(135deg,#2f5cff,#7a5cff); }
+    .card{ background:#fff; border:1px solid #e7e7e7; border-radius:16px; padding:22px; box-shadow:0 10px 30px rgba(0,0,0,.06); }
+    h1{ font-size:20px; margin:0 0 8px; }
+    .subtitle{ margin:0 0 16px; color:#444; font-size:14px; line-height:1.4; }
+    .notice{ background:#f0f5ff; border:1px solid #d9e6ff; color:#1f2a44; border-radius:12px; padding:12px; font-size:13px; line-height:1.35; margin:0 0 16px; }
+    label{ display:block; font-size:14px; margin:12px 0 6px; }
+    input{ width:100%; padding:10px 12px; border:1px solid #cfcfcf; border-radius:12px; outline:none; font-size:16px; }
+    input:focus{ border-color:#6b7cff; box-shadow:0 0 0 3px rgba(107,124,255,.18); }
+    .row{ display:flex; gap:10px; align-items:center; margin-top:10px; }
+    .row input[type="checkbox"]{ width:auto; }
+    button{ width:100%; margin-top:16px; padding:11px 12px; border:0; border-radius:12px; font-size:16px; cursor:pointer; background:#2f5cff; color:#fff; font-weight:650; }
+    button:hover{ filter:brightness(.96); }
+    .footer{ margin-top:14px; font-size:12.5px; color:#666; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+    a{ color:#2f5cff; text-decoration:none; }
+    .small{ font-size:12px; color:#666; margin-top:10px; }
+  </style>
+  
+  <script src="https://www.google.com/recaptcha/api.js?render=6LcVWjwsAAAAAD_o79Ltq5jigNNSz396_KgkSfaJ"></script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <div style="font-weight:700;">Portale interno</div>
+        <div style="font-size:12.5px; color:#556;">Accesso area riservata</div>
+      </div>
+    </div>
+
+    <main class="card">
+      <h1>Accesso</h1>
+      <p class="subtitle">Verifica la sicurezza prima di continuare.</p>
+
+      <div class="notice">
+        <strong>Protezione attiva:</strong> Modulo protetto da reCAPTCHA v3.
+      </div>
+
+      <form id="loginForm" action="/auth/session" method="post">
+        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+        
+        <label for="user">Nome utente</label>
+        <input id="user" name="username" type="text" required />
+
+        <label for="pass">Passcode</label>
+        <input id="pass" name="password" type="password" required />
+
+        <div class="row">
+          <input id="show" type="checkbox" />
+          <label for="show" style="font-size:13px; cursor:pointer;">Mostra passcode</label>
+        </div>
+
+        <button type="submit">Continua</button>
+      </form>
+
+      <div class="footer">
+        <span>© <span id="y"></span> Portale interno</span>
+        <span><a href="#">Privacy</a> · <a href="#">Supporto</a></span>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Gestione Anno e Visibilità Password
+    document.getElementById("y").textContent = new Date().getFullYear();
+    const cb = document.getElementById("show");
+    const pw = document.getElementById("pass");
+    cb.addEventListener("change", () => {
+      pw.type = cb.checked ? "text" : "password";
+    });
+
+    // Esecuzione reCAPTCHA v3 con la NUOVA Key
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault(); 
+      
+      grecaptcha.ready(function() {
+        // Usiamo la nuova chiave anche qui
+        grecaptcha.execute('6LcVWjwsAAAAAD_o79Ltq5jigNNSz396_KgkSfaJ', {action: 'login'}).then(function(token) {
+          document.getElementById("g-recaptcha-response").value = token;
+          console.log("Token v3 generato correttamente");
+          
+          // Invio finale del form
+          form.submit();
+        });
+      });
+    });
+  </script>
+</body>
+</html>
