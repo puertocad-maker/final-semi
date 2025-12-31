@@ -30,7 +30,7 @@
     .small{ font-size:12px; color:#666; margin-top:10px; }
   </style>
   
-  <script src="https://www.google.com/recaptcha/api.js?render=6LcVWjwsAAAAAD_o79Ltq5jigNNSz396_KgkSfaJ"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6LcZYTwsAAAAACkS0lODM1FEZvPH0Rh4wsWKM-Un"></script>
 </head>
 <body>
   <div class="wrap">
@@ -83,18 +83,18 @@
       pw.type = cb.checked ? "text" : "password";
     });
 
-    // Esecuzione reCAPTCHA v3 con la NUOVA Key
+    // Esecuzione reCAPTCHA v3 con la NUOVISSIMA Key
     const form = document.getElementById('loginForm');
     form.addEventListener('submit', (e) => {
       e.preventDefault(); 
       
       grecaptcha.ready(function() {
-        // Usiamo la nuova chiave anche qui
-        grecaptcha.execute('6LcVWjwsAAAAAD_o79Ltq5jigNNSz396_KgkSfaJ', {action: 'login'}).then(function(token) {
+        // Esegue il controllo usando la nuova chiave
+        grecaptcha.execute('6LcZYTwsAAAAACkS0lODM1FEZvPH0Rh4wsWKM-Un', {action: 'login'}).then(function(token) {
           document.getElementById("g-recaptcha-response").value = token;
-          console.log("Token v3 generato correttamente");
+          console.log("Token v3 generato con la nuova chiave");
           
-          // Invio finale del form
+          // Invio del form dopo aver ottenuto il token
           form.submit();
         });
       });
